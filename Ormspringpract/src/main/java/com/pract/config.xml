@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       https://www.springframework.org/tx/spring-tx.xsd
+       ">
+    <tx:annotation-driven/>
+    
+    
+    
+    
+    
+    <!--   DivermanagerDatasource   -->
+    <bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" name="ds">
+      <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+      <property name="url" value="jdbc:mysql://localhost:3306/empdetails"></property>
+      <property name="username" value="root"></property>
+      <property name="password" value="1999"></property>    
+    </bean>
+    
+    
+    <!-- LocalSessionFactory -->
+    <bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" name="localsessionfact">
+    <property name="dataSource"  ref="ds"></property>
+    <property name="hibernateProperties">
+    <props>
+      <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+      <prop key="hibernate.hbm2ddl.auto">update</prop>
+      <prop key="hibernate.show_sql">true</prop>
+   
+    </props>
+   
+    </property>
+    
+    
+    <property name="annotatedClasses">
+    
+    <list>
+    <value>com.pract.Student</value>
+   
+    </list>
+    
+    
+    </property>
+    </bean>
+    
+    
+    
+    <!-- Hibernate Template bean -->
+    <bean class="org.springframework.orm.hibernate5.HibernateTemplate" name="hibernatretemp">
+    <property name="sessionFactory" ref="localsessionfact"></property>
+    
+    </bean>
+    
+    <!--  Daoclass Bean-->
+    <bean class="com.pract.Studentdao.StudentDao" name="dao">
+    <property name="hibernateTemplate" ref="hibernatretemp"></property>
+    
+    
+    </bean>    
+    <!-- transectinal bean  -->
+    
+    <bean class="org.springframework.orm.hibernate5.HibernateTransactionManager" name="transactionManager">
+    <property name="sessionFactory" ref="localsessionfact"></property>
+    </bean>
+    
+    </beans>
